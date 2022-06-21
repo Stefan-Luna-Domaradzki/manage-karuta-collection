@@ -1,5 +1,6 @@
 getwd()
-setwd("C:/Users/Stefan/Desktop/Legends of Programming/Karuta - Data Science")
+setwd("C:/Users/ja/Documents/GitHub/manage-karuta-collection")
+
 list.files()
 
 ?dplyr
@@ -34,7 +35,7 @@ str(mal_status$Completed)
 
 #-- creating tables from Karuta data ---- 
 
-karuta_collection_spreadsheet <- read.csv2(file = "Karuta_09-04-22.csv",  header = T, sep=",")
+karuta_collection_spreadsheet <- read.csv2(file = "Wonhai 29-05.csv",  header = T, sep=",")
 
 colnames(karuta_collection_spreadsheet)
 
