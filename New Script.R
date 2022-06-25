@@ -70,25 +70,29 @@ get.tracked.anime <- function(collection){
 
 #_____________________________________________
 search.tracked.in.tag <- function(tracked,collection){
+ 
+  #print(collection)
   
-  
+  print("dziala")
 }
 
 #_____________________________________________
 
-print.simple.menu <- function(last_operation = "none"){
+print.simple.menu <- function(last.operation = "none"){
   
   cat("\n\n")
   cat("\n_______________________________________")
   cat("\nSimple menu")
   cat("\n_______________________________________")
-  cat("\nLast operation: ", last_operation)
+  cat("\nLast operation: ", last.operation)
   
   cat("\nPossible operations:\n\n")
   cat("1 - load new\n")
   cat("2 - get list of tracked anime\n")
-  cat("3 - search for tracked anime in specified tag")
+  cat("3 - search for tracked anime in specified tag\n")
   
+  
+  cat("11 - check menu status")
   cat("quit - quit")
   
   cat("\n_______________________________________")
@@ -101,21 +105,21 @@ print.simple.menu()
 
 set.user.menu <- function(){
   operation <- TRUE
-
+  last.operation <- "none"
 
   while(operation){
-  
-    print.simple.menu()
+    
+    print.simple.menu(last.operation)
     user.input <- readline()
     #print(user.input)
   
     
     #1 - load new collection "no working cards"
     if(user.input == "1") {
-     
       
       user.collection.raw <- read.user.collection()
       if(length(user.collection.raw)==0) {
+        #change this no !=0 and pass whole function into this new if statement
         print("data frame length is 0")
         break
         }
@@ -126,6 +130,7 @@ set.user.menu <- function(){
       names(uc.split.nw)[1] <- "none"
       
       uc.menu <- uc.split.nw
+      last.operation <- "\"load new collection\""
     }
   
     #when adding workers optimalisation function will have following line
@@ -135,15 +140,26 @@ set.user.menu <- function(){
     #2 - get list of tracked anime
     if(user.input == "2") {
       tracked.anime <- get.tracked.anime(uc.menu)
-      print(tracked.anime)
+      tracked.anime <- sort(tracked.anime$`series`)
+
+      cat("List of tracked anime:")
+      for (i in c(1:length(tracked.anime))) {cat("\n",i, " ", tracked.anime[i])}
+     
+      
+      last.operation <- "\"get list of tracked anime\""
     }
     
     
     #3 - search for tracked anime in user's tag
     #print those with highest wishlist
     if(user.input == "3") {
+      cat("specify tag to scan: ")
+      tag.to.scan <- readline()
       
       
+      search.tracked.in.tag(tracked.anime, uc.menu[[tag.to.scan]])
+      
+      last.operation <- "\"tracked anime in tag\""
     }
     
     
@@ -153,6 +169,10 @@ set.user.menu <- function(){
       print("not available")
       
     }
+    
+    if(user.input == "11") {
+      cat("menu status: working")
+      }
     
     #quit - quit menu
     if(user.input == "quit") {
@@ -171,6 +191,22 @@ set.user.menu <- function(){
 
 
 #Testing ----
+
+test <- read.user.collection() 
+uc.no.working <- test[,c("code","number", "edition", "character", "series","wishlists", "tag")]
+
+uc.split.nw <- split.data.frame(uc.no.working, uc.no.working$tag)
+names(uc.split.nw)[1] <- "none"
+
+uc.menu <- uc.split.nw
+
+
+tracked <- get.tracked.anime(uc.menu)
+str(tracked)
+tracked <- sort(tracked$`series`)
+tracked
+
+search.tracked.in.tag(tracked, uc.menu)
 
 #po wczytaniiu test
 
