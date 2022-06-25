@@ -1,7 +1,12 @@
 #To Do ----
 #read files
 #automate fiile choosing
+#fix back option in choosing file path
+#add back option in other functions
 
+#add functio to track basic functional tags eg. "fav" "burn" "trade", get their names
+
+#in simple menu add displaying current collection name
 
 #split based on users tag
 #create list of "tracked anime" (out of specified tag eg. all in fav)
@@ -26,7 +31,9 @@ library(stringi)
 
 
 getwd()
+setwd("C:/Users/ja/Documents/GitHub/manage-karuta-collection")
 setwd("./data")
+
 #functions ----
 
 
@@ -36,9 +43,12 @@ read.user.collection <- function(){
   collections <- list.files()
   print(collections)
   
-  cat("Enter name of the file to load: ")
+  cat("Enter \"back\" to return to menu \n Enter name of the file to load: ")
   file.path <- readline()
 
+  
+  if(file.path=="back") {return(data.frame())}
+  
   user.collection <- read.csv2(file.path, header = T, sep=",")
   #print(user.collection)
   
@@ -46,12 +56,12 @@ read.user.collection <- function(){
 }
 
 #_____________________________________________
-get.tracked.anime <- function(uc.large.list){
+get.tracked.anime <- function(collection){
   
-  print(names(uc.large.list))
+  print(names(collection))
   cat("Which tag specifies tracked anime?:") 
   tracked.name <- readline()
-  tracked.anime <- unique(uc.split.nw[[tracked.name]][5])
+  tracked.anime <- unique(collection[[tracked.name]][5])
   
   row.names(tracked.anime) <- c(1:length(tracked.anime[,1]))
   
@@ -59,15 +69,32 @@ get.tracked.anime <- function(uc.large.list){
 }
 
 #_____________________________________________
-
-print.simple.menu <- function(){
+search.tracked.in.tag <- function(tracked,collection){
   
-  cat("1 - load new\n")
-  cat("2 - get list of tracked anime\n")
-  cat("quit - quit\n")
   
 }
 
+#_____________________________________________
+
+print.simple.menu <- function(last_operation = "none"){
+  
+  cat("\n\n")
+  cat("\n_______________________________________")
+  cat("\nSimple menu")
+  cat("\n_______________________________________")
+  cat("\nLast operation: ", last_operation)
+  
+  cat("\nPossible operations:\n\n")
+  cat("1 - load new\n")
+  cat("2 - get list of tracked anime\n")
+  cat("3 - search for tracked anime in specified tag")
+  
+  cat("quit - quit")
+  
+  cat("\n_______________________________________")
+  cat("\nType your answer:")
+}
+print.simple.menu()
 
 #_____________________________________________
 #manages simple console menu
@@ -80,14 +107,20 @@ set.user.menu <- function(){
   
     print.simple.menu()
     user.input <- readline()
-    print(user.input)
+    #print(user.input)
   
+    
     #1 - load new collection "no working cards"
     if(user.input == "1") {
+     
       
       user.collection.raw <- read.user.collection()
+      if(length(user.collection.raw)==0) {
+        print("data frame length is 0")
+        break
+        }
+      
       uc.no.working <- user.collection.raw[,c("code","number", "edition", "character", "series","wishlists", "tag")]
-      print("tu jeszcze dziala")
       
       uc.split.nw <- split.data.frame(uc.no.working, uc.no.working$tag)
       names(uc.split.nw)[1] <- "none"
@@ -101,8 +134,24 @@ set.user.menu <- function(){
     
     #2 - get list of tracked anime
     if(user.input == "2") {
-      tracketd.anime <- get.tracked.anime(uc.menu)
-      print(tracketd.anime)
+      tracked.anime <- get.tracked.anime(uc.menu)
+      print(tracked.anime)
+    }
+    
+    
+    #3 - search for tracked anime in user's tag
+    #print those with highest wishlist
+    if(user.input == "3") {
+      
+      
+    }
+    
+    
+    #4 - search for specified card in tag?
+    if(user.input == "4") {
+  
+      print("not available")
+      
     }
     
     #quit - quit menu
