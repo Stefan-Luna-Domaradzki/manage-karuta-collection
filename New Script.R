@@ -69,9 +69,11 @@ get.tracked.anime <- function(collection){
 }
 
 #_____________________________________________
-search.tracked.in.tag <- function(tracked,collection){
+search.tracked.in.tag <- function(tracked,collection.tag){
  
-  #print(collection)
+  
+  
+  #print(collection.tag)
   
   print("dziala")
 }
@@ -206,7 +208,8 @@ str(tracked)
 tracked <- sort(tracked$`series`)
 tracked
 
-search.tracked.in.tag(tracked, uc.menu)
+ftmid <- uc.menu[["ftmid"]]
+search.tracked.in.tag(tracked, uc.menu[["ftmid"]])
 
 #po wczytaniiu test
 
